@@ -1,0 +1,22 @@
+{
+  "name": "shipeasecommerce",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:deps": "go mod tidy",
+    "migration": "node migration.js",
+    "gen:db": "go generate -v ./schema",
+    "gen:types": "go run gqlgen/main.go",
+    "gen:graphql": "go run github.com/99designs/gqlgen generate",
+    "dev": "nodemon --exec go run server.go --signal SIGTERM",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ronnycoding",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "nodemon": "2.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}

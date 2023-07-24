@@ -1,0 +1,11 @@
+*.a
+*.egg-info
+dist
+build
+Godeps
+
+.idea
+*.log
+*.out
+
+node_modules
