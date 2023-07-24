@@ -1,17 +1,18 @@
-module shipeasecommerce
+module github.com/ronnycoding/shipeasecommerce
 
 go 1.19
 
 require (
+	github.com/99designs/gqlgen v0.17.35
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	gorm.io/driver/postgres v1.5.2
+	gorm.io/gen v0.3.23
 	gorm.io/gorm v1.25.2
 )
 
 require (
-	github.com/99designs/gqlgen v0.17.35 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/bytedance/sonic v1.10.0-rc2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
@@ -55,7 +56,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.2.0 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
-	gorm.io/gen v0.3.23 // indirect
 	gorm.io/hints v1.1.2 // indirect
 	gorm.io/plugin/dbresolver v1.4.1 // indirect
 )

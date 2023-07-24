@@ -19,13 +19,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const valName = "DB_CONNECTION"
-
 type DbConnectionMiddleware struct {
 	db *gorm.DB
 }
 
-func New() (*gorm.DB, error) {
+func getDBConnectionString() string {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -40,6 +38,11 @@ func New() (*gorm.DB, error) {
 	sslmode := os.Getenv("POSTGRES_SSLMODE")
 
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", user, password, host, port, dbname, sslmode)
+	return dsn
+}
+
+func New() (*gorm.DB, error) {
+	dsn := getDBConnectionString()
 	fmt.Printf("Connecting to database : %v", dsn)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Warn),
@@ -67,6 +70,7 @@ func New() (*gorm.DB, error) {
 }
 
 func (fam *DbConnectionMiddleware) MiddlewareFunc() gin.HandlerFunc {
+	dsn := getDBConnectionString()
 	return func(c *gin.Context) {
 		if fam.db == nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -76,13 +80,14 @@ func (fam *DbConnectionMiddleware) MiddlewareFunc() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set(valName, fam.db)
+		c.Set(dsn, fam.db)
 		c.Next()
 	}
 }
 
 func GetDB(c *gin.Context) *gorm.DB {
-	dbConnection, ok := c.Get(valName)
+	dsn := getDBConnectionString()
+	dbConnection, ok := c.Get(dsn)
 	if !ok {
 		panic(fmt.Errorf("Error connecting database"))
 	}
@@ -90,7 +95,8 @@ func GetDB(c *gin.Context) *gorm.DB {
 }
 
 func GinContextFromContext(ctx context.Context) (*gin.Context, error) {
-	ginContext := ctx.Value(valName)
+	dsn := getDBConnectionString()
+	ginContext := ctx.Value(dsn)
 	if ginContext == nil {
 		err := fmt.Errorf("could not retrieve gin.Context")
 		return nil, err
