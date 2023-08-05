@@ -13,7 +13,8 @@ services:
   #     - .:/go/src/github.com/ronnycoding/shipeasecommerce
   #   # platform: linux/amd64 # Don't know if this is needed
   postgres:
-    image: postgres
+    image: postgis/postgis
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -30,7 +31,6 @@ services:
       # - $PWD/migration/20221205123710_add_user_post_table.sql:/docker-entrypoint-initdb.d/20221112170819_add_post_table.sql
     ports:
       - "${POSTGRES_PORT}:5432"
-    restart: unless-stopped
 
 volumes:
   psqldata: {}
